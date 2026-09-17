@@ -1,0 +1,66 @@
+<%- include('partials/header', { title: 'Movie Hunter - Home' }) %>
+
+<main class="container">
+  <div class="subnav">
+    <a href="/moviepage">SHOW ALL</a>
+    <a href="#latest">LATEST TRAILERS</a>
+    <a href="#top-rated">TOP RATED</a>
+    <a href="#most-commented">MOST COMMENTED</a>
+    <form class="search-form" action="/" method="get">
+      <label for="search">SEARCH</label>
+      <input id="search" type="text" name="q" value="<%= q %>" placeholder="Enter search here">
+      <button type="submit">GO!</button>
+    </form>
+  </div>
+
+  <% if (q) { %>
+    <div class="search-result">Search results for: <strong><%= q %></strong></div>
+  <% } %>
+
+  <section id="latest" class="movie-section">
+    <div class="section-title"><h2>LATEST TRAILERS</h2><a href="/moviepage">See all</a></div>
+    <div class="poster-row">
+      <% latest.forEach(movie => { %>
+        <a class="poster-card" href="/movie/<%= movie._id %>">
+          <img src="<%= movie.poster %>" alt="<%= movie.name %>">
+          <span class="play-overlay">▶</span>
+          <h3><%= movie.name %></h3>
+          <div class="rating"><span><%= '★'.repeat(Math.min(5, movie.rating)) %><%= '☆'.repeat(5 - Math.min(5, movie.rating)) %></span> <b><%= movie.reviewCount || 0 %></b></div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section id="top-rated" class="movie-section">
+    <div class="section-title"><h2>TOP RATED</h2><a href="/moviepage">See all</a></div>
+    <div class="poster-row">
+      <% topRated.forEach(movie => { %>
+        <a class="poster-card" href="/movie/<%= movie._id %>">
+          <img src="<%= movie.poster %>" alt="<%= movie.name %>">
+          <h3><%= movie.name %></h3>
+          <div class="rating"><span><%= '★'.repeat(Math.min(5, movie.rating)) %><%= '☆'.repeat(5 - Math.min(5, movie.rating)) %></span> <b><%= movie.reviewCount || 0 %></b></div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section id="most-commented" class="movie-section">
+    <div class="section-title"><h2>MOST COMMENTED</h2><a href="/moviepage">See all</a></div>
+    <div class="poster-row">
+      <% mostCommented.forEach(movie => { %>
+        <a class="poster-card" href="/movie/<%= movie._id %>">
+          <img src="<%= movie.poster %>" alt="<%= movie.name %>">
+          <h3><%= movie.name %></h3>
+          <div class="rating"><span><%= '★'.repeat(Math.min(5, movie.rating)) %><%= '☆'.repeat(5 - Math.min(5, movie.rating)) %></span> <b><%= movie.reviewCount || 0 %></b></div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section id="coming" class="info-strip">
+    <div><strong>COMING SOON</strong><p>Add your upcoming movies from the Movie List page.</p></div>
+    <a class="btn" href="/add">ADD MOVIE</a>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

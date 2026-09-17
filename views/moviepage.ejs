@@ -1,0 +1,49 @@
+<%- include('partials/header', { title: 'Movie List' }) %>
+
+<main class="table-page">
+  <div class="table-toolbar">
+    <a class="btn" href="/add">Add Movie</a>
+    <form class="table-search" action="/moviepage" method="get">
+      <input type="text" name="q" value="<%= q %>" placeholder="Search movie name">
+      <button class="btn dark" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="table-wrap">
+    <table class="movie-table">
+      <thead>
+        <tr>
+          <th>S.No.</th><th>Movie Name</th><th>Release Year</th><th>Production Company</th><th>Genre</th><th>Rating</th><th>Runtime</th><th>Director</th><th>Description</th><th>Poster</th><th># of Reviews</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (movieList.length === 0) { %>
+          <tr><td colspan="12" class="empty">No movies found.</td></tr>
+        <% } %>
+        <% movieList.forEach((movie, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><a href="/movie/<%= movie._id %>" class="movie-link"><%= movie.name %></a></td>
+            <td><%= movie.releaseYear %></td>
+            <td><%= movie.productionCompany %></td>
+            <td><%= movie.genre %></td>
+            <td><%= movie.rating %></td>
+            <td><%= movie.runtime %> minutes</td>
+            <td><%= movie.director %></td>
+            <td><%= movie.description %></td>
+            <td><img class="table-poster" src="<%= movie.poster %>" alt="<%= movie.name %>"></td>
+            <td><%= movie.reviewCount || 0 %></td>
+            <td class="actions">
+              <a href="/edit/<%= movie._id %>" title="Edit">✏️</a>
+              <form action="/delete/<%= movie._id %>" method="post" onsubmit="return confirm('Delete this movie?')">
+                <button type="submit" title="Delete">🗑️</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,54 @@
+<%- include('partials/header', { title: movie.name + ' - Movie Hunter' }) %>
+
+<main class="detail-page">
+  <a class="back-link" href="/moviepage">← Back to Movie List</a>
+  <section class="movie-detail">
+    <div class="detail-poster"><img src="<%= movie.poster %>" alt="<%= movie.name %>"></div>
+    <div class="detail-content">
+      <div class="detail-title-row"><h1><%= movie.name %></h1><span class="rating-big">★ <%= movie.rating %>/5</span></div>
+      <p class="meta"><%= movie.releaseYear %> · <%= movie.genre %> · <%= movie.runtime %> minutes</p>
+      <p><strong>Director:</strong> <%= movie.director %></p>
+      <p><strong>Production Company:</strong> <%= movie.productionCompany %></p>
+      <p class="description"><%= movie.description %></p>
+      <button class="btn" id="reviewButton">Write Your Review!</button>
+      <a class="btn outline" href="/edit/<%= movie._id %>">Edit Movie</a>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <div class="section-title"><h2>REVIEWS</h2><span><%= movie.reviewCount || 0 %> reviews</span></div>
+    <% if (!movie.reviews || movie.reviews.length === 0) { %>
+      <p class="muted">No new reviews yet. Be the first to write one.</p>
+    <% } else { %>
+      <% movie.reviews.slice().reverse().forEach(review => { %>
+        <article class="review-card">
+          <div><strong><%= review.name %></strong> · <%= review.title %></div>
+          <p><%= review.review %></p>
+          <small><%= review.likeDislike %></small>
+        </article>
+      <% }) %>
+    <% } %>
+  </section>
+</main>
+
+<div class="modal" id="reviewModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeReview">×</button>
+    <h2>Write Your Review!</h2>
+    <p class="modal-movie"><%= movie.name %></p>
+    <p class="required-note">All form fields are required</p>
+    <form action="/movie/<%= movie._id %>/reviews" method="post" class="review-form">
+      <label>Your Name *<input name="name" required></label>
+      <label>Review Title *<input name="title" required></label>
+      <label>Your Review *<textarea name="review" rows="4" required></textarea></label>
+      <fieldset>
+        <legend>Like/Dislike *</legend>
+        <label class="radio"><input type="radio" name="likeDislike" value="Like" required> Like</label>
+        <label class="radio"><input type="radio" name="likeDislike" value="Dislike"> Dislike</label>
+      </fieldset>
+      <button class="btn" type="submit">Save</button>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
